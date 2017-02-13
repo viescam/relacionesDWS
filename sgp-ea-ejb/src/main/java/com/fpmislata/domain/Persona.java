@@ -98,6 +98,14 @@ public class Persona implements Serializable {
     public void setInstrumento(Instrumento instrumento) {
         this.instrumento = instrumento;
     }
+
+    public Set<Partitura> getPartituras() {
+        return partituras;
+    }
+
+    public void setPartituras(Set<Partitura> partituras) {
+        this.partituras = partituras;
+    }
     
     
 
