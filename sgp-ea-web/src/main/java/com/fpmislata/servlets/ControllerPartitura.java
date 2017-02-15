@@ -5,6 +5,7 @@
  */
 package com.fpmislata.servlets;
 
+import com.fpmislata.domain.Instrumento;
 import com.fpmislata.domain.Partitura;
 import com.fpmislata.domain.Persona;
 import com.fpmislata.service.PartituraServiceLocal;
@@ -30,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
         urlPatterns = {"/ListarPartituras",
             "/AltaPartitura",
             "/ListarPartiturasPorPersona",
+            "/EliminarPartitura",
             "/ControllerPartitura"})
 public class ControllerPartitura extends HttpServlet {
 
@@ -51,6 +53,10 @@ public class ControllerPartitura extends HttpServlet {
 // Si la operacion es Listar partituras por persona
         } else if (userPath.equals("/ListarPartiturasPorPersona")) {
             listarPartituraPorPersona(request, response);
+        } else if (userPath.equals("/EliminarPartitura")) {
+            eliminarPartitura(request, response);
+        }  else if (userPath.equals("/ModificarPartitura")) {
+            modificarPartitura(request, response);
         } else if (userPath.equals("/ControllerPartitura")) {
             listarPartituras(request, response);
         }
@@ -127,6 +133,107 @@ public class ControllerPartitura extends HttpServlet {
             rd.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    
+     private void eliminarPartitura(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        //1. Recuperamos los parametros
+        String idPartitura = request.getParameter("id");
+
+        //2. Creamos el objeto Persona
+        int id = Integer.parseInt(idPartitura);
+        Partitura partitura = new Partitura();
+        partitura.setId(id);
+        
+        Persona persona = partitura.getPersona();
+        try {
+            //3. Eliminamos a la persona
+            this.partituraService.deletePartitura(partitura);
+            this.personaService.updatePersona(persona);
+        } catch (Exception e) {
+            //Informamos cualquier error
+            e.printStackTrace();
+        }
+
+        // Ejecutamos el metodo y obtenemos la lista
+        // Ejecutamos el metodo y obtenemos la lista
+        List lista = partituraService.listPartituras();
+        ArrayList<Persona> listaArray = new ArrayList<>(lista);
+        // Asignamos al request el atributo lista
+        request.getSession().setAttribute("partituras", listaArray);
+        // Pasamos al RequestDispatcher la pagina a cargar
+        RequestDispatcher rd = request.getRequestDispatcher("/listarPartituras.jsp");
+        // Cargamos la pagina
+        rd.forward(request, response);
+    }
+     
+     private void modificarPartitura(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String accion = request.getParameter("accion");
+
+        if (accion != null && accion.equals("editar")) {
+
+            //1. Recuperamos el id de la persona seleccionada
+            String idPartitura = request.getParameter("id");
+            if (idPartitura != null) {
+                //2. Creamos el objeto persona a recuperar
+                int id = Integer.valueOf(idPartitura);
+                Partitura partitura = new Partitura();
+                partitura.setId(id);
+                try {
+                    partitura = this.partituraService.findPartituraById(partitura);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //3. Compartimos el objeto persona en alcance request
+                request.setAttribute("partitura", partitura);
+
+                //4. Redireccionamos a la pagina para editar el objeto Persona
+                request.getRequestDispatcher("/modificarPartitura.jsp").forward(request, response);
+            }
+        } else if (accion != null && accion.equals("modificar")) {
+            
+            String idinstrumento = request.getParameter("id");
+            String tipo = request.getParameter("tipo");
+            String compositor = request.getParameter("compositor");
+            String nombre = request.getParameter("nombre");        
+            int id_persona = Integer.parseInt(request.getParameter("propietario"));
+            //2. Creamos el objeto Partitura
+            Partitura partitura = new Partitura();
+            partitura.setId(Integer.parseInt(idinstrumento));
+            partitura.setNombre(nombre);
+            partitura.setCompositor(compositor);
+            partitura.setTipo(tipo);
+
+            //3. Recuperamos el objeto Persona y asignamos el partitura
+            Persona persona = new Persona();
+            persona.setId(id_persona);
+            persona = personaService.findPersonaById(persona);
+
+            //4. Asignamos los valores
+            partitura.setPersona(persona);
+            persona.getPartituras().add(partitura);            
+
+            try {
+                partituraService.updatePartitura(partitura);
+                personaService.updatePersona(persona);
+            } catch (Exception e) {
+                //Informamos cualquier error
+                e.printStackTrace();
+            }
+
+            List lista = partituraService.listPartituras();
+            ArrayList<Persona> listaArray = new ArrayList<>(lista);
+            // Asignamos al request el atributo lista
+            request.getSession().setAttribute("partituras", listaArray);
+            // Pasamos al RequestDispatcher la pagina a cargar
+            RequestDispatcher rd = request.getRequestDispatcher("/listarPartituras.jsp");
+            // Cargamos la pagina
+            rd.forward(request, response);
         }
     }
 
