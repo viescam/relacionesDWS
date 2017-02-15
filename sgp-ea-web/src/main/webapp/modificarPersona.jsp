@@ -23,17 +23,14 @@
         <label for="telefono">Teléfono:</label>
         <input type="text" name="telefono" value="${persona.telefono}" style="display: block;"/>
         
-        <br>
-        <hr width="100%" align="left">
-        <h3>Datos del instrumento musical</h3>
-        <br>
-        <label for="nombre_instrumento">Nombre:</label>
+        <input type="hidden" name="idinstrumento" value="${persona.instrumento.id}"/>
+        <label for="nombre_instrumento">Instrumento:</label>
         <input type="text" name="nombre_instrumento" value="${persona.instrumento.nombre}" style="display: block;" />
 
-        <label for="cuerda">Cuerda:</label>
+        <label for="cuerda">Cuerda del instrumento:</label>
         <input type="text" name="cuerda" value="${persona.instrumento.cuerda}" style="display: block;" />
 
-        <label for="marca">Marca:</label>
+        <label for="marca">Marca del instrumento:</label>
         <input type="text" name="marca" value="${persona.instrumento.marca}" style="display: block;" />
 
         <input type="submit" name="guardar" value="guardar">

@@ -85,7 +85,6 @@ public class ControllerPersona extends HttpServlet {
         instrumento.setNombre(nombre_instrumento);
         instrumento.setCuerda(cuerda);
         instrumento.setMarca(marca);
-        instrumento.setPersona(persona);
         persona.setInstrumento(instrumento);
 
         try {
@@ -173,6 +172,7 @@ public class ControllerPersona extends HttpServlet {
             String telefono = request.getParameter("telefono");
 
             //Recuperamos los datos del instrumento
+            String idinstrumento = request.getParameter("idinstrumento");
             String nombre_instrumento = request.getParameter("nombre_instrumento");
             String cuerda = request.getParameter("cuerda");
             String marca = request.getParameter("marca");
@@ -187,10 +187,10 @@ public class ControllerPersona extends HttpServlet {
 
             //3. Creamos el objeto Instrumento
             Instrumento instrumento = new Instrumento();
+            instrumento.setId(Integer.valueOf(idinstrumento));
             instrumento.setNombre(nombre_instrumento);
             instrumento.setCuerda(cuerda);
             instrumento.setMarca(marca);
-            instrumento.setPersona(persona);
             persona.setInstrumento(instrumento);
 
             try {

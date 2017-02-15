@@ -25,16 +25,13 @@
             <label for="telefono">Teléfono:</label>
             <input type="text" name="telefono" style="display: block;"/>
             
-            <label for="instrumento">Instrumento:</label>
-            <input type="text" name="instrumento" style="display: block;" />
-
-            <label for="nombre_instrumento">Nombre:</label>
+            <label for="nombre_instrumento">Instrumento:</label>
             <input type="text" name="nombre_instrumento" style="display: block;" />
 
-            <label for="cuerda">Cuerda:</label>
+            <label for="cuerda">Cuerda del instrumento:</label>
             <input type="text" name="cuerda" style="display: block;" />
 
-            <label for="marca">Marca:</label>
+            <label for="marca">Marca del instrumento:</label>
             <input type="text" name="marca" style="display: block;" />
 
             <input type="submit" value="Enviar" />
