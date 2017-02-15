@@ -25,12 +25,12 @@ import javax.servlet.http.HttpServletResponse;
  * @author borja
  */
 @WebServlet(name = "ControllerPersona",
-            loadOnStartup = 1,
-            urlPatterns = {"/ListarPersonas",
-                "/AltaPersona",
-                "/EliminarPersona",
-                "/ModificarPersona",
-                "/ControllerPersona"})
+        loadOnStartup = 1,
+        urlPatterns = {"/ListarPersonas",
+            "/AltaPersona",
+            "/EliminarPersona",
+            "/ModificarPersona",
+            "/ControllerPersona"})
 public class ControllerPersona extends HttpServlet {
 
     @EJB
@@ -48,52 +48,47 @@ public class ControllerPersona extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userPath = request.getServletPath();
-        
-        if(userPath.equals("/ListarPersonas")){
+
+        if (userPath.equals("/ListarPersonas")) {
             listarPersonas(request, response);
-        }else if (userPath.equals("/AltaPersona")){
+        } else if (userPath.equals("/AltaPersona")) {
             altaPersona(request, response);
-        }else if (userPath.equals("/EliminarPersona")){
-            eliminarPersona(request,response);
-        }else if (userPath.equals("/ModificarPersona")){
+        } else if (userPath.equals("/EliminarPersona")) {
+            eliminarPersona(request, response);
+        } else if (userPath.equals("/ModificarPersona")) {
             modificarPersona(request, response);
         }
-        
-        
-        
+
     }
-    
+
     private void altaPersona(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException { 
+            throws ServletException, IOException {
 
         //1. Recuperamos los parametros
         String nombre = request.getParameter("nombre");
         String email = request.getParameter("email");
         String telefono = request.getParameter("telefono");
-        String dni = request.getParameter("dni");
 
         //Recuperamos los datos del instrumento
         String nombre_instrumento = request.getParameter("nombre_instrumento");
         String cuerda = request.getParameter("cuerda");
         String marca = request.getParameter("marca");
-        
+
         //2. Creamos el objeto Persona
         Persona persona = new Persona();
         persona.setNombre(nombre);
         persona.setEmail(email);
         persona.setTelefono(telefono);
-        
+
         //3. Creamos el objeto Instrumento
         Instrumento instrumento = new Instrumento();
         instrumento.setNombre(nombre_instrumento);
         instrumento.setCuerda(cuerda);
         instrumento.setMarca(marca);
+        instrumento.setPersona(persona);
         persona.setInstrumento(instrumento);
-        
-        
 
-
-        try {            
+        try {
             //Si ya existe el email no deberia registrarse
             personaService.addPersona(persona);
         } catch (Exception e) {
@@ -106,14 +101,15 @@ public class ControllerPersona extends HttpServlet {
         List lista = personaService.listPersonas();
         ArrayList<Persona> listaArray = new ArrayList<>(lista);
         // Asignamos al request el atributo lista
-        request.getSession().setAttribute("personas",listaArray);
+        request.getSession().setAttribute("personas", listaArray);
 
-	request.getRequestDispatcher("/listarPersonas.jsp").forward(request,response);   
-        
+        request.getRequestDispatcher("/listarPersonas.jsp").forward(request, response);
+
     }
+
     private void eliminarPersona(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         //1. Recuperamos los parametros
         String idPersona = request.getParameter("id");
 
@@ -122,7 +118,7 @@ public class ControllerPersona extends HttpServlet {
         Persona persona = new Persona();
         persona.setId(id);
 
-        try {      
+        try {
             //3. Eliminamos a la persona
             this.personaService.deletePersona(persona);
         } catch (Exception e) {
@@ -131,24 +127,24 @@ public class ControllerPersona extends HttpServlet {
         }
 
         // Ejecutamos el metodo y obtenemos la lista
-            // Ejecutamos el metodo y obtenemos la lista
-            List lista = personaService.listPersonas();
-            ArrayList<Persona> listaArray = new ArrayList<>(lista);
-            // Asignamos al request el atributo lista
-            request.getSession().setAttribute("personas",listaArray);
+        // Ejecutamos el metodo y obtenemos la lista
+        List lista = personaService.listPersonas();
+        ArrayList<Persona> listaArray = new ArrayList<>(lista);
+        // Asignamos al request el atributo lista
+        request.getSession().setAttribute("personas", listaArray);
         // Pasamos al RequestDispatcher la pagina a cargar
         RequestDispatcher rd = request.getRequestDispatcher("/listarPersonas.jsp");
         // Cargamos la pagina
         rd.forward(request, response);
     }
-    
+
     private void modificarPersona(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String accion = request.getParameter("accion");
 
         if (accion != null && accion.equals("editar")) {
-            
+
             //1. Recuperamos el id de la persona seleccionada
             String idPersona = request.getParameter("id");
             if (idPersona != null) {
@@ -156,9 +152,9 @@ public class ControllerPersona extends HttpServlet {
                 int id = Integer.valueOf(idPersona);
                 Persona persona = new Persona();
                 persona.setId(id);
-                try{              
+                try {
                     persona = this.personaService.findPersonaById(persona);
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -168,15 +164,14 @@ public class ControllerPersona extends HttpServlet {
                 //4. Redireccionamos a la pagina para editar el objeto Persona
                 request.getRequestDispatcher("/modificarPersona.jsp").forward(request, response);
             }
-        }else if  (accion != null && accion.equals("modificar")) {      
+        } else if (accion != null && accion.equals("modificar")) {
 
             //1. Recuperamos los parametros
             String idPersona = request.getParameter("id");
             String nombre = request.getParameter("nombre");
             String email = request.getParameter("email");
             String telefono = request.getParameter("telefono");
-            String dni = request.getParameter("dni");
-            
+
             //Recuperamos los datos del instrumento
             String nombre_instrumento = request.getParameter("nombre_instrumento");
             String cuerda = request.getParameter("cuerda");
@@ -189,15 +184,14 @@ public class ControllerPersona extends HttpServlet {
             persona.setNombre(nombre);
             persona.setEmail(email);
             persona.setTelefono(telefono);
-            
-             //3. Creamos el objeto Instrumento
+
+            //3. Creamos el objeto Instrumento
             Instrumento instrumento = new Instrumento();
             instrumento.setNombre(nombre_instrumento);
             instrumento.setCuerda(cuerda);
             instrumento.setMarca(marca);
+            instrumento.setPersona(persona);
             persona.setInstrumento(instrumento);
-            
-
 
             try {
                 this.personaService.updatePersona(persona);
@@ -211,28 +205,28 @@ public class ControllerPersona extends HttpServlet {
             List lista = personaService.listPersonas();
             ArrayList<Persona> listaArray = new ArrayList<>(lista);
             // Asignamos al request el atributo lista
-            request.getSession().setAttribute("personas",listaArray);
+            request.getSession().setAttribute("personas", listaArray);
 
             request.getRequestDispatcher("/listarPersonas.jsp").forward(request, response);
         }
     }
+
     private void listarPersonas(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try{
+        try {
             // Ejecutamos el metodo y obtenemos la lista
             List lista = personaService.listPersonas();
             ArrayList<Persona> listaArray = new ArrayList<>(lista);
             // Asignamos al request el atributo lista
-            request.getSession().setAttribute("personas",listaArray);
+            request.getSession().setAttribute("personas", listaArray);
             // Pasamos al RequestDispatcher la pagina a cargar
             RequestDispatcher rd = request.getRequestDispatcher("/listarPersonas.jsp");
             // Cargamos la pagina
             rd.forward(request, response);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

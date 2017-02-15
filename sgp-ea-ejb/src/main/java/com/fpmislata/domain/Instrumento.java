@@ -31,10 +31,6 @@ public class Instrumento implements Serializable{
     @Column(nullable = false, length = 45)
     private String marca;
     
-    @OneToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
-    @PrimaryKeyJoinColumn
-    private Persona persona;
-
     public Instrumento(String nombre, String cuerda, String marca) {
         this.nombre = nombre;
         this.cuerda = cuerda;
@@ -75,13 +71,4 @@ public class Instrumento implements Serializable{
     public void setMarca(String marca) {
         this.marca = marca;
     }
-    
-    
-
-    
-    
-    
-    
-    
-    
 }

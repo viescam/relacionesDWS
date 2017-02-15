@@ -36,7 +36,7 @@ public class Persona implements Serializable {
     private String telefono;   
     
     @OneToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
-    @PrimaryKeyJoinColumn
+    @JoinColumn(name="instrumento")
     private Instrumento instrumento;
     
     @OneToMany(mappedBy="persona", cascade={CascadeType.ALL}, fetch= FetchType.EAGER)

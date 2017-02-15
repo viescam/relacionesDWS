@@ -18,6 +18,9 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ControllerPartitura</servlet-name>
+        <url-pattern>/AltaPartitura</url-pattern>
+        <url-pattern>/ListarPartiturasPorPersona</url-pattern>
+        <url-pattern>/ListarPartituras</url-pattern>
         <url-pattern>/ControllerPartitura</url-pattern>
     </servlet-mapping>
     <session-config>

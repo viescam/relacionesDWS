@@ -25,6 +25,7 @@
                 <th>Marca</th>
                 <th></th>
                 <th></th>
+                <th>Visualizar partituras</th>
 
             </tr>
 
@@ -50,6 +51,8 @@
                 <td><%=marca%></td>
                 <td><a href="ModificarPersona?accion=editar&id=<%=id%>">Modificar</td>
                 <td><a href="EliminarPersona?id=<%=id%>">Eliminar</a></td>
+                <td><a href="ListarPartiturasPorPersona?id=<%=id%>">Visualizar Partituras</a></td>
+                
             </tr>
             <% }%>
         </table>
