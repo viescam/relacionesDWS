@@ -215,11 +215,12 @@ public class ControllerPersona extends HttpServlet {
             throws ServletException, IOException {
         try {
             // Ejecutamos el metodo y obtenemos la lista
-            List lista = personaService.listPersonas();
-            ArrayList<Persona> listaArray = new ArrayList<>(lista);
+            List listaPersonas = personaService.listPersonas();
+            ArrayList<Persona> listaArray = new ArrayList<>(listaPersonas);
             // Asignamos al request el atributo lista
             request.getSession().setAttribute("personas", listaArray);
             // Pasamos al RequestDispatcher la pagina a cargar
+            
             RequestDispatcher rd = request.getRequestDispatcher("/listarPersonas.jsp");
             // Cargamos la pagina
             rd.forward(request, response);
