@@ -8,6 +8,10 @@
         <servlet-name>ControllerPartitura</servlet-name>
         <servlet-class>com.fpmislata.servlets.ControllerPartitura</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ControllerActo</servlet-name>
+        <servlet-class>com.fpmislata.servlets.ControllerActo</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControllerPersona</servlet-name>
         <url-pattern>/AltaPersona</url-pattern>
@@ -15,6 +19,7 @@
         <url-pattern>/ListarPersonas</url-pattern>
         <url-pattern>/ModificarPersona</url-pattern>
         <url-pattern>/ControllerPersona</url-pattern>
+        <url-pattern>/ListarActosPorCliente</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ControllerPartitura</servlet-name>
@@ -24,6 +29,11 @@
         <url-pattern>/EliminarPartitura</url-pattern>
         <url-pattern>/ModificarPartitura</url-pattern>
         <url-pattern>/ControllerPartitura</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControllerActo</servlet-name>
+        <url-pattern>/ControllerActo</url-pattern>
+        <url-pattern>/ListarActos</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

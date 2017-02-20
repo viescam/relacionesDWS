@@ -7,6 +7,7 @@ package com.fpmislata.domain;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 
@@ -42,6 +43,13 @@ public class Persona implements Serializable {
     @OneToMany(mappedBy="persona", cascade={CascadeType.ALL}, fetch= FetchType.EAGER)
     private Set<Partitura> partituras;
     
+    
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @JoinTable(name= "personas_actos", 
+            joinColumns = @JoinColumn(name="persona"),
+            inverseJoinColumns = @JoinColumn(name="acto"))
+    private Set<Acto> actos;
+    
     public Persona() {
         this.partituras = new HashSet<>();
     }
@@ -53,6 +61,16 @@ public class Persona implements Serializable {
         this.telefono = telefono;
         this.partituras = new HashSet<>();
     } 
+
+    public Set<Acto> getActos() {
+        return actos;
+    }
+
+    public void setActos(Set<Acto> actos) {
+        this.actos = actos;
+    }
+    
+    
     
 //    //RELACION 1 a 1 con tabla documentos
 //    @OneToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)

@@ -5,6 +5,7 @@
  */
 package com.fpmislata.servlets;
 
+import com.fpmislata.domain.Acto;
 import com.fpmislata.domain.Persona;
 import com.fpmislata.domain.Instrumento;
 import com.fpmislata.service.PersonaServiceLocal;
@@ -30,7 +31,9 @@ import javax.servlet.http.HttpServletResponse;
             "/AltaPersona",
             "/EliminarPersona",
             "/ModificarPersona",
-            "/ControllerPersona"})
+            "/ControllerPersona",
+            "/ListarPersonasPorActo"
+        })
 public class ControllerPersona extends HttpServlet {
 
     @EJB
@@ -57,6 +60,8 @@ public class ControllerPersona extends HttpServlet {
             eliminarPersona(request, response);
         } else if (userPath.equals("/ModificarPersona")) {
             modificarPersona(request, response);
+        } else if (userPath.equals("/ListarActosPorCliente")){
+            listarActosPorCliente(request,response);
         }
 
     }
@@ -223,6 +228,27 @@ public class ControllerPersona extends HttpServlet {
             
             RequestDispatcher rd = request.getRequestDispatcher("/listarPersonas.jsp");
             // Cargamos la pagina
+            rd.forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void listarActosPorCliente(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String idPersona = request.getParameter("id");
+
+            //2. Creamos el objeto Persona
+            int id = Integer.parseInt(idPersona);
+            Persona persona = new Persona();
+            persona.setId(id);
+            persona = personaService.findPersonaById(persona);
+            
+            ArrayList<Acto> listaActos = new ArrayList<>(persona.getActos());
+            
+            request.getSession().setAttribute("listaActos", listaActos);
+            RequestDispatcher rd = request.getRequestDispatcher("/listarActos.jsp");
             rd.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
