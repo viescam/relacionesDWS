@@ -5,6 +5,6 @@
         <br>
         <a href="ListarPartituras">Listado de Partituras</a>
         <br>
-        <a href="ListarActos">Listado de Partituras</a>
+        <a href="ListarActos">Listado de Actos</a>
     </body>
 </html>

@@ -44,7 +44,7 @@ public class Persona implements Serializable {
     private Set<Partitura> partituras;
     
     
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name= "personas_actos", 
             joinColumns = @JoinColumn(name="persona"),
             inverseJoinColumns = @JoinColumn(name="acto"))
@@ -52,6 +52,7 @@ public class Persona implements Serializable {
     
     public Persona() {
         this.partituras = new HashSet<>();
+        this.actos = new HashSet<>();
     }
 
     public Persona(int id, String nombre, String email, String telefono, Documento documento) {
@@ -60,6 +61,7 @@ public class Persona implements Serializable {
         this.email = email;
         this.telefono = telefono;
         this.partituras = new HashSet<>();
+        this.actos = new HashSet<>();
     } 
 
     public Set<Acto> getActos() {

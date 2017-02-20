@@ -8,11 +8,13 @@ package com.fpmislata.servlets;
 import com.fpmislata.domain.Acto;
 import com.fpmislata.domain.Persona;
 import com.fpmislata.domain.Instrumento;
+import com.fpmislata.service.ActoServiceLocal;
 import com.fpmislata.service.PersonaServiceLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -35,6 +37,9 @@ import javax.servlet.http.HttpServletResponse;
             "/ListarPersonasPorActo"
         })
 public class ControllerPersona extends HttpServlet {
+
+    @EJB
+    private ActoServiceLocal actoService;
 
     @EJB
     private PersonaServiceLocal personaService;
@@ -60,8 +65,8 @@ public class ControllerPersona extends HttpServlet {
             eliminarPersona(request, response);
         } else if (userPath.equals("/ModificarPersona")) {
             modificarPersona(request, response);
-        } else if (userPath.equals("/ListarActosPorCliente")){
-            listarActosPorCliente(request,response);
+        } else if (userPath.equals("/ListarActosPorPersona")) {
+            listarActosPorPersona(request, response);
         }
 
     }
@@ -99,15 +104,31 @@ public class ControllerPersona extends HttpServlet {
             //Informamos cualquier error
             e.printStackTrace();
         }
+        String[] actos = request.getParameterValues("actosPersona");
+        if (actos != null) {
+            Acto acto;
+            for (String a : actos) {
+                acto = new Acto();
+                int id = Integer.parseInt(a);
+                acto.setId(id);
+                acto = actoService.findActoById(acto);
+
+                acto.getPersonas().add(persona);
+                persona.getActos().add(acto);
+                try {
+                    //Si ya existe el email no deberia registrarse
+                    actoService.updateActo(acto);
+                } catch (Exception e) {
+                    //Informamos cualquier error
+                    e.printStackTrace();
+                }
+            }
+
+        }
 
         // Volvemos a cargar la lista de personas
         // Ejecutamos el metodo y obtenemos la lista
-        List lista = personaService.listPersonas();
-        ArrayList<Persona> listaArray = new ArrayList<>(lista);
-        // Asignamos al request el atributo lista
-        request.getSession().setAttribute("personas", listaArray);
-
-        request.getRequestDispatcher("/listarPersonas.jsp").forward(request, response);
+        listarPersonas(request,response);
 
     }
 
@@ -121,10 +142,22 @@ public class ControllerPersona extends HttpServlet {
         int id = Integer.parseInt(idPersona);
         Persona persona = new Persona();
         persona.setId(id);
-
+        persona = personaService.findPersonaById(persona);
+        
+        Set<Acto> listaActos = persona.getActos();
+        ArrayList<Acto> actos = new ArrayList<>(listaActos);
+        for (Acto acto : actos) {
+            acto.getPersonas().remove(persona);            
+            try {
+                actoService.updateActo(acto);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
         try {
             //3. Eliminamos a la persona
-            this.personaService.deletePersona(persona);
+            personaService.deletePersona(persona);
         } catch (Exception e) {
             //Informamos cualquier error
             e.printStackTrace();
@@ -132,14 +165,7 @@ public class ControllerPersona extends HttpServlet {
 
         // Ejecutamos el metodo y obtenemos la lista
         // Ejecutamos el metodo y obtenemos la lista
-        List lista = personaService.listPersonas();
-        ArrayList<Persona> listaArray = new ArrayList<>(lista);
-        // Asignamos al request el atributo lista
-        request.getSession().setAttribute("personas", listaArray);
-        // Pasamos al RequestDispatcher la pagina a cargar
-        RequestDispatcher rd = request.getRequestDispatcher("/listarPersonas.jsp");
-        // Cargamos la pagina
-        rd.forward(request, response);
+        listarPersonas(request,response);
     }
 
     private void modificarPersona(HttpServletRequest request, HttpServletResponse response)
@@ -223,9 +249,13 @@ public class ControllerPersona extends HttpServlet {
             List listaPersonas = personaService.listPersonas();
             ArrayList<Persona> listaArray = new ArrayList<>(listaPersonas);
             // Asignamos al request el atributo lista
-            request.getSession().setAttribute("personas", listaArray);
-            // Pasamos al RequestDispatcher la pagina a cargar
+            List lista = actoService.listActos();
+            ArrayList listaActos = new ArrayList<>(lista);
             
+            request.getSession().setAttribute("personas", listaArray);
+            request.getSession().setAttribute("actos", listaActos);
+            // Pasamos al RequestDispatcher la pagina a cargar
+
             RequestDispatcher rd = request.getRequestDispatcher("/listarPersonas.jsp");
             // Cargamos la pagina
             rd.forward(request, response);
@@ -233,8 +263,8 @@ public class ControllerPersona extends HttpServlet {
             e.printStackTrace();
         }
     }
-    
-    private void listarActosPorCliente(HttpServletRequest request, HttpServletResponse response)
+
+    private void listarActosPorPersona(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             String idPersona = request.getParameter("id");
@@ -244,10 +274,10 @@ public class ControllerPersona extends HttpServlet {
             Persona persona = new Persona();
             persona.setId(id);
             persona = personaService.findPersonaById(persona);
-            
+
             ArrayList<Acto> listaActos = new ArrayList<>(persona.getActos());
-            
-            request.getSession().setAttribute("listaActos", listaActos);
+
+            request.getSession().setAttribute("actos", listaActos);
             RequestDispatcher rd = request.getRequestDispatcher("/listarActos.jsp");
             rd.forward(request, response);
         } catch (Exception e) {

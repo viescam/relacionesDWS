@@ -19,7 +19,7 @@
         <url-pattern>/ListarPersonas</url-pattern>
         <url-pattern>/ModificarPersona</url-pattern>
         <url-pattern>/ControllerPersona</url-pattern>
-        <url-pattern>/ListarActosPorCliente</url-pattern>
+        <url-pattern>/ListarActosPorPersona</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ControllerPartitura</servlet-name>
@@ -33,7 +33,10 @@
     <servlet-mapping>
         <servlet-name>ControllerActo</servlet-name>
         <url-pattern>/ControllerActo</url-pattern>
+        <url-pattern>/AltaActo</url-pattern>
         <url-pattern>/ListarActos</url-pattern>
+        <url-pattern>/EliminarActo</url-pattern>
+        <url-pattern>/ListarPersonasPorActo</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

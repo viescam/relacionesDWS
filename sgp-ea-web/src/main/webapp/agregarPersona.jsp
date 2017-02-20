@@ -4,6 +4,8 @@
     Author     : lodiade
 --%>
 
+<%@page import="com.fpmislata.domain.Acto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
     <head>
@@ -33,6 +35,20 @@
 
             <label for="marca">Marca del instrumento:</label>
             <input type="text" name="marca" style="display: block;" />
+            
+            <label for="persona">Actos:</label>
+            <%
+                ArrayList<Acto> lista = (ArrayList) session.getAttribute("actos");
+                for (Acto acto : lista) {
+                    int id = acto.getId();
+                    String tipo = acto.getTipo();
+                    String lugar = acto.getLugar();                   
+
+            %>
+            <input type="checkbox" name="actosPersona" value="<%=id%>"><%=tipo%> - <%=lugar%>
+            <%}%>
+            
+            
 
             <input type="submit" value="Enviar" />
         </form>

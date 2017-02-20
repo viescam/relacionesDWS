@@ -31,7 +31,7 @@
                 <th></th>
             </tr>
             <%
-                ArrayList<Acto> lista = (ArrayList) session.getAttribute("listaActos");
+                ArrayList<Acto> lista = (ArrayList) session.getAttribute("actos");
                 for (Acto acto : lista) {
                     int id = acto.getId();
                     String lugar = acto.getLugar();
@@ -44,8 +44,8 @@
                 <td><%=precio%></td>
                 <td><%=tipo%></td>
                 <td><a href="UpdateCategoria?accion=editar&id=<%=id%>">Modificar</a></td>
-                <td><a href="DeleteCategoria?id=<%=id%>">Eliminar</a></td>
-                <td><a href="ListarClientesPorActo?id=<%=id%>">Visualizar clientes</a></td>
+                <td><a href="EliminarActo?id=<%=id%>">Eliminar</a></td>
+                <td><a href="ListarPersonasPorActo?id=<%=id%>">Visualizar personas</a></td>
             </tr>
             <% }%>
         </table>
