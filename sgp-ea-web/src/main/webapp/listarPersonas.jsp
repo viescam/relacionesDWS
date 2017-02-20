@@ -53,7 +53,7 @@
                 <td><a href="ModificarPersona?accion=editar&id=<%=id%>">Modificar</td>
                 <td><a href="EliminarPersona?id=<%=id%>">Eliminar</a></td>
                 <td><a href="ListarPartiturasPorPersona?id=<%=id%>">Visualizar Partituras</a></td>
-                <td><a href="listarActosPorCliente?id=<%=id%>">Visualizar actos</a></td>
+                <td><a href="ListarActosPorCliente?id=<%=id%>">Visualizar actos</a></td>
                 
             </tr>
             <% }%>

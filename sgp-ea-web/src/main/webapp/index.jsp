@@ -4,5 +4,7 @@
         <a href="ListarPersonas">Listado de Personas</a>
         <br>
         <a href="ListarPartituras">Listado de Partituras</a>
+        <br>
+        <a href="ListarActos">Listado de Partituras</a>
     </body>
 </html>
