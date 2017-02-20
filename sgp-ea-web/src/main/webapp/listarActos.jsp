@@ -1,6 +1,6 @@
 <%-- 
     Document   : listarActos
-    Created on : 20-feb-2017, 10:25:15
+    Created on : 20-feb-2017, 12:33:30
     Author     : alumno
 --%>
 
@@ -9,7 +9,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-        <head>
+    <html>
+    <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Listado de Actos</title>
     </head>
@@ -22,9 +23,9 @@
         <table border="1">
             <tr>
                 <th>Id</th>
-                <th>Tipo</th>
-                <th>Presupuesto</th>
                 <th>Lugar</th>
+                <th>Presupuesto</th>
+                <th>Tipo</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -33,17 +34,17 @@
                 ArrayList<Acto> lista = (ArrayList) session.getAttribute("listaActos");
                 for (Acto acto : lista) {
                     int id = acto.getId();
+                    String lugar = acto.getLugar();
+                    Float precio = acto.getPresupuesto();
                     String tipo = acto.getTipo();
-                    Float presupuesto = acto.getPresupuesto();
-                    String lugar = acto.getLugar();                    
             %>                
             <tr>
                 <td><%=id%></td>
-                <td><%=tipo%></td>
-                <td><%=presupuesto%></td>
                 <td><%=lugar%></td>
-                <td><a href="UpdateActo?accion=editar&id=<%=id%>">Modificar</a></td>
-                <td><a href="DeleteActo?id=<%=id%>">Eliminar</a></td>
+                <td><%=precio%></td>
+                <td><%=tipo%></td>
+                <td><a href="UpdateCategoria?accion=editar&id=<%=id%>">Modificar</a></td>
+                <td><a href="DeleteCategoria?id=<%=id%>">Eliminar</a></td>
                 <td><a href="ListarClientesPorActo?id=<%=id%>">Visualizar clientes</a></td>
             </tr>
             <% }%>
@@ -51,4 +52,5 @@
         <br>
         <a href="index.jsp">Regresar al Inicio</a>
     </body>
+</html>
 </html>
