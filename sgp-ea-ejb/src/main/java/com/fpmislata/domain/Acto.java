@@ -42,7 +42,7 @@ public class Acto implements Serializable{
     @Column(nullable = false, length = 100)
     private String lugar;
     
-    @ManyToMany(cascade={CascadeType.ALL},mappedBy = "actos")
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},mappedBy = "actos")
     private Set<Persona> personas;
 
     public Acto() {
